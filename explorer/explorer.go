@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"nomadcoin/blockchain"
+	"strconv"
 )
 
 const (
@@ -44,5 +45,5 @@ func Start(port int) {
 	handler.HandleFunc("/", home)
 	handler.HandleFunc("/add", add)
 	fmt.Printf("Listening on http://localhost:%d\n", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), handler))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", strconv.Itoa(port)), handler))
 }
