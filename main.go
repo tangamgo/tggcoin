@@ -1,7 +1,11 @@
 package main
 
-import "nomadcoin/cli"
+import (
+	"tggcoin/cli"
+	"tggcoin/db"
+)
 
 func main() {
+	defer db.Close()
 	cli.Start()
 }
