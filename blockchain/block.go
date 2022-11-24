@@ -2,7 +2,6 @@ package blockchain
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 	"tggcoin/db"
 	"tggcoin/utils"
@@ -10,13 +9,13 @@ import (
 )
 
 type Block struct {
-	Data       string `json:"data"`
-	Hash       string `json:"hash"`
-	PrevHash   string `json:"prevHas,omitempty"`
-	Height     int    `json:"height"`
-	Difficulty int    `json:"difficulty"`
-	Nonce      int    `json:"nonce"`
-	timestamp  int    `json:"timestamp"`
+	Hash         string `json:"hash"`
+	PrevHash     string `json:"prevHas,omitempty"`
+	Height       int    `json:"height"`
+	Difficulty   int    `json:"difficulty"`
+	Nonce        int    `json:"nonce"`
+	timestamp    int    `json:"timestamp"`
+	Transactions []*Tx  `json:"transactions"`
 }
 
 func (b *Block) persist() {
@@ -44,7 +43,7 @@ func (b *Block) mine() {
 	for {
 		b.timestamp = int(time.Now().Unix())
 		hash := utils.Hash(b)
-		fmt.Printf("Target:%s\nHash%s\nNonce:%d\n\n\n", target, hash, b.Nonce)
+		// fmt.Printf("Target:%s\nHash%s\nNonce:%d\n\n\n", target, hash, b.Nonce)
 		if strings.HasPrefix(hash, target) {
 			b.Hash = hash
 			break
@@ -55,16 +54,16 @@ func (b *Block) mine() {
 	}
 }
 
-func createBlock(data string, prevHash string, height int) *Block {
+func createBlock(prevHash string, height int, diff int) *Block {
 	block := &Block{
-		Data:       data,
 		Hash:       "",
 		PrevHash:   prevHash,
 		Height:     height,
-		Difficulty: Blockchain().difficulty(),
+		Difficulty: diff,
 		Nonce:      0,
 	}
 	block.mine()
+	block.Transactions = Mempool.txToConfirm()
 	block.persist()
 
 	return block
