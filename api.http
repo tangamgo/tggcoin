@@ -7,7 +7,10 @@ GET http://localhost:4000/status
 GET http://localhost:4000/blocks
 
 ###
-GET http://localhost:4000/balance/tgg
+GET http://localhost:4000/wallet
+
+###
+GET http://localhost:4000/balance/e8225921052a286dc6a04210f75911ee53a5c599f12389c72cd730b24f8668e7f14a1a67dd2426b4ffd08d09c2a34776a3ae6b7a2eca2920bc7914cdcc446f1c
 
 ###
 GET http://localhost:4000/mempool
@@ -24,5 +27,5 @@ POST http://localhost:4000/transactions
 
 {
   "to":"lynn",
-  "amount":60
+  "amount":40
 }

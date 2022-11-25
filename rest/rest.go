@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"tggcoin/blockchain"
 	"tggcoin/utils"
+	"tggcoin/wallet"
 )
 
 var port string
@@ -29,6 +30,10 @@ type urlDescription struct {
 type balanceResponse struct {
 	Address string `json:"address"`
 	Balance int    `json:"balance"`
+}
+
+type mywWalletResponse struct {
+	Address string `json:address`
 }
 
 type errorResponse struct {
@@ -138,9 +143,16 @@ func transactions(rw http.ResponseWriter, r *http.Request) {
 	utils.HandleErr(json.NewDecoder(r.Body).Decode(&payload))
 	err := blockchain.Mempool.AddTx(payload.To, payload.Amount)
 	if err != nil {
-		json.NewEncoder(rw).Encode(errorResponse{"not enough funds"})
+		rw.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(rw).Encode(errorResponse{err.Error()})
+		return
 	}
 	rw.WriteHeader(http.StatusCreated)
+}
+
+func myWallet(rw http.ResponseWriter, r *http.Request) {
+	address := wallet.Wallet().Address
+	json.NewEncoder(rw).Encode(mywWalletResponse{Address: address})
 }
 
 func Start(aPort int) {
@@ -153,6 +165,7 @@ func Start(aPort int) {
 	router.HandleFunc("/blocks/{hash:[a-f0-9]+}", block).Methods("GET")
 	router.HandleFunc("/balance/{address}", balance).Methods("GET")
 	router.HandleFunc("/mempool", mempool).Methods("GET")
+	router.HandleFunc("/wallet", myWallet).Methods("GET")
 	router.HandleFunc("/transactions", transactions).Methods("POST")
 	fmt.Printf("Listening on http://localhost%s\n", port)
 	log.Fatal(http.ListenAndServe(port, router))
