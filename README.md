@@ -24,3 +24,8 @@
 
 #### PoW(작업증명) vs PoS(지분증명)
 - PoW로 구현
+
+## P2P
+
+####  gorilla websocket
+- go get github.com/gorilla/websocket
