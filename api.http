@@ -1,7 +1,7 @@
 GET http://localhost:4000
 
 ###
-GET http://localhost:4000/status
+GET http://localhost:3000/status
 
 ###
 GET http://localhost:4000/blocks
@@ -23,9 +23,20 @@ POST http://localhost:4000/blocks
 }
 
 ###
-POST http://localhost:4000/transactions
+POST http://localhost:3000/transactions
 
 {
-  "to":"lynn",
+  "to":"ynn",
   "amount":40
 }
+
+###
+POST http://localhost:3000/peers
+
+{
+  "address":"127.0.0.1",
+  "port" : "2000"
+}
+
+###
+GET http://localhost:2000/peers
